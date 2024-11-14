@@ -1,4 +1,4 @@
-package arrays
+package array_search
 
 import (
 	"math"

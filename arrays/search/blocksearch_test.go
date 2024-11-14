@@ -1,39 +1,6 @@
-package arrays
+package array_search
 
-import (
-	"slices"
-	"testing"
-)
-
-func TestBinarySearchRecursive(t *testing.T) {
-	s := []int{2, 6, 7, 10, 15, 20, 32, 53, 77, 101}
-	v := 53
-	i := BinarySearchRecursive(s, v, 0, len(s))
-	if i != 7 {
-		t.Errorf("BinarySearchRecursive = %d; expected: 7", i)
-	}
-
-	v = 110
-	i = BinarySearchRecursive(s, v, 0, len(s))
-	if i != -1 {
-		t.Errorf("BinarySearchRecursive = %d; expected: -1", i)
-	}
-}
-
-func TestBinarySearch(t *testing.T) {
-	s := []int{2, 6, 7, 10, 15, 20, 32, 53, 77, 101}
-	v := 53
-	i := BinarySearch(s, v)
-	if i != 7 {
-		t.Errorf("BinarySearchRecursive = %d; expected: 7", i)
-	}
-
-	v = 108
-	i = BinarySearch(s, v)
-	if i != -1 {
-		t.Errorf("BinarySearchRecursive = %d; expected: -1", i)
-	}
-}
+import "testing"
 
 func TestCrystalBall(t *testing.T) {
 	b := []bool{false, false, false, false, false, false, false, true, true, true, true, true, true}
@@ -112,31 +79,5 @@ func TestBlockSearch(t *testing.T) {
 	i = BlockSearch(a, v)
 	if i != 8 {
 		t.Errorf("BlockSearch = %d, expected 8", i)
-	}
-}
-
-func TestBubbleSort(t *testing.T) {
-	a := []int{5, 3, 2, 4, 5, 1}
-	b := []int{1, 2, 3, 4, 5, 5}
-	BubbleSort(a)
-	r := slices.Equal(a, b)
-	if !r {
-		t.Errorf("BubbleSort = %t, expected true", r)
-	}
-
-	a = []int{1, 2}
-	b = []int{1, 2}
-	BubbleSort(a)
-	r = slices.Equal(a, b)
-	if !r {
-		t.Errorf("BubbleSort = %t, expected true", r)
-	}
-
-	a = []int{5, 4, 3, 2, 1, 0}
-	b = []int{0, 1, 2, 3, 4, 5}
-	BubbleSort(a)
-	r = slices.Equal(a, b)
-	if !r {
-		t.Errorf("BubbleSort = %t, expected true", r)
 	}
 }
