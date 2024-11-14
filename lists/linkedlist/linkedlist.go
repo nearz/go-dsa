@@ -6,6 +6,24 @@ import (
 	"strings"
 )
 
+/*
+Method list for LinkedList
+Append(val T)
+Add(vals ...T)
+Prepend(val T)
+Get(idx int) val T, err
+Set(val T, idx int) err
+InsertAt(val T, idx int) err
+RemoveAt(idx int) val T, err
+Remove(val T) val T, err
+Len() int
+Empty() bool
+----- UTILITY FUNCTIONS -----
+Values() []T
+String() string
+Print()
+*/
+
 // Node struct where the value is a comparable type
 type Node[T comparable] struct {
 	val  T
@@ -69,7 +87,6 @@ func (l *LinkedList[T]) Prepend(val T) {
 	l.len += 1
 }
 
-// Get the value from the list at the index requested.
 func (l *LinkedList[T]) Get(idx int) (T, error) {
 	// Check if the list is empty or if the index
 	// requested is out of bounds. If so return zero
@@ -89,7 +106,24 @@ func (l *LinkedList[T]) Get(idx int) (T, error) {
 	return cur.val, nil
 }
 
-// Insert the a value at the requested index.
+func (l *LinkedList[T]) Set(val T, idx int) error {
+	// Check if the list is empty or if the index
+	// requested is out of bounds. If so return error.
+	if l.len == 0 {
+		return errors.New("Empty list")
+	} else if idx >= l.len || idx < 0 {
+		return errors.New("Index out of bounds")
+	}
+	// Loop and increment node up until cur equals
+	// the node at the index requested. Then set
+	// the node's value
+	cur := l.head
+	for i := 0; i < idx; i, cur = i+1, cur.next {
+	}
+	cur.val = val
+	return nil
+}
+
 func (l *LinkedList[T]) InsertAt(val T, idx int) error {
 	// If length of list is 0 and the index requested
 	// is 0 then add the value to the list. Otherwise
@@ -136,7 +170,6 @@ func (l *LinkedList[T]) InsertAt(val T, idx int) error {
 	return nil
 }
 
-// Remove the node from the list at the requested index
 func (l *LinkedList[T]) RemoveAt(idx int) (T, error) {
 	// If length of list is 0 then return zero value for type
 	// and the error message.
@@ -189,7 +222,6 @@ func (l *LinkedList[T]) RemoveAt(idx int) (T, error) {
 	return cur.val, nil
 }
 
-// Remove a node from the list if the value matches the requested one.
 func (l *LinkedList[T]) Remove(val T) (T, error) {
 	// Loop through the list until the current node's value is equal
 	// to the request value or the current node's next is nil. If the

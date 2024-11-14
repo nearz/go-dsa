@@ -104,7 +104,32 @@ func TestGet(t *testing.T) {
 	f.Add(1.2, 2.1)
 	_, err = f.Get(2)
 	if err == nil {
-		t.Error("Get() = nil, expected an error message. Index Out of Bounds")
+		t.Error("Get() err == nil, expected an error message. Index out of bounds")
+	}
+}
+
+func TestSet(t *testing.T) {
+	i := New[int]()
+	i.Add(0, 1, 2, 3, 4)
+	s := "0, 1, 9, 3, 4"
+	err := i.Set(9, 2)
+	lstr := i.String()
+	if err != nil {
+		t.Error(err)
+	}
+	if lstr != s {
+		t.Errorf("Set() = %s, expected %s", lstr, s)
+	}
+
+	err = i.Set(9, 7)
+	if err == nil {
+		t.Error("Set() err == nil, expected an error message. Index out of bounds")
+	}
+
+	i = New[int]()
+	err = i.Set(0, 0)
+	if err == nil {
+		t.Error("Set() err == nil, expected an error message. Empty list")
 	}
 }
 
