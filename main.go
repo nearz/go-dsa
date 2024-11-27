@@ -3,57 +3,47 @@ package main
 import (
 	"fmt"
 
-	"github.com/nearz/go-dsa/stacks/stack"
+	"github.com/nearz/go-dsa/queues/ringbuffer"
 )
 
 func main() {
-	s := stack.New[int]()
-	s.Push(0)
-	s.Push(1)
-	s.Push(2)
-	s.Push(3)
-
-	fmt.Println(s.Len())
-	fmt.Println(s.Empty())
-
-	v, err := s.Peek()
-	if err != nil {
-		fmt.Println(err)
+	r := ringbuffer.New[int](5)
+	fmt.Println(r.String())
+	for i := range 7 {
+		err := r.Enqueue(i + 1)
+		if err != nil {
+			fmt.Println(err)
+			break
+		}
 	}
-	fmt.Printf("Peek: %d\n", v)
-
-	v, err = s.Pop()
+	fmt.Println(r.String())
+	v, err := r.Deque()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("Pop: %d\n", v)
-
-	v, err = s.Pop()
+	fmt.Printf("Read: %d\n", v)
+	v, err = r.Deque()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("Pop: %d\n", v)
-
-	v, err = s.Pop()
+	fmt.Printf("Read: %d\n", v)
+	v, err = r.Deque()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("Pop: %d\n", v)
-
-	v, err = s.Pop()
+	fmt.Printf("Read: %d\n", v)
+	err = r.Enqueue(0)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("Pop: %d\n", v)
-
-	v, err = s.Pop()
+	err = r.Enqueue(0)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("Pop: %d\n", v)
+	fmt.Println(r.String())
 }
