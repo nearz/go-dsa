@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	r := ringbuffer.New[int](5)
+	r := ringbuffer.New[int](5, true)
 	fmt.Println(r.String())
 	for i := range 7 {
 		err := r.Enqueue(i + 1)
@@ -16,34 +16,10 @@ func main() {
 			break
 		}
 	}
-	fmt.Println(r.String())
+	fmt.Println(r.Stringer())
 	v, err := r.Deque()
 	if err != nil {
 		fmt.Println(err)
-		return
 	}
 	fmt.Printf("Read: %d\n", v)
-	v, err = r.Deque()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Printf("Read: %d\n", v)
-	v, err = r.Deque()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Printf("Read: %d\n", v)
-	err = r.Enqueue(0)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	err = r.Enqueue(0)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(r.String())
 }
