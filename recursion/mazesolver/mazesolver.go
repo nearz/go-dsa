@@ -16,55 +16,62 @@ var dirs = map[string][]int{
 
 func Solver(maze []string, wall string, start, end Point) []Point {
 	seen := make(map[Point]struct{})
-	res := walk(maze, wall, start, end, seen)
-	fmt.Println(res)
 	path := []Point{}
-	for k := range seen {
-		path = append(path, k)
-	}
-	printPath(len(maze[0]), len(maze), seen)
+	walk(maze, wall, start, end, seen, &path)
+	// printPath(maze, seen)
 	return path
 }
 
-func walk(maze []string, wall string, cur, end Point, seen map[Point]struct{}) bool {
-	// off the map
-	if (cur.x < 0 || cur.x >= len(maze[0])) || (cur.y < 0 || cur.y >= len(maze)) {
-		return false
-	}
-	// a wall
-	if string(maze[cur.y][cur.x]) == "#" {
-		return false
-	}
-	// is the end
-	if cur == end {
-		return true
-	}
-	// seen
-	if _, ok := seen[cur]; ok {
-		return false
-	}
-
-	seen[cur] = struct{}{}
-	var res bool
-	// for each direction call walk with new cur as next direction
+func walk(maze []string, wall string, cur, end Point, seen map[Point]struct{}, path *[]Point) {
+	// slice to hold next nodes for all directions.
+	next := []Point{}
 	for _, v := range dirs {
-		next := Point{
+		nextNode := Point{
 			x: cur.x + v[0],
 			y: cur.y + v[1],
 		}
-		res = walk(maze, wall, next, end, seen)
+		// if next node is end return
+		// if next node is out of bounds, a wall or in seen do not add to slice
+		if nextNode == end {
+			seen[cur] = struct{}{}
+			seen[nextNode] = struct{}{}
+			*path = append(*path, cur)
+			*path = append(*path, nextNode)
+			return
+		} else if !inBounds(nextNode, maze) || string(maze[nextNode.y][nextNode.x]) == "#" {
+			continue
+		} else if _, ok := seen[nextNode]; ok {
+			continue
+		} else {
+			next = append(next, nextNode)
+		}
 	}
-	return res
+
+	seen[cur] = struct{}{}
+	*path = append(*path, cur)
+	// for all nodes in next slice call walk
+	for i := range next {
+		walk(maze, wall, next[i], end, seen, path)
+	}
 }
 
-func printPath(w, h int, seen map[Point]struct{}) {
-	for ih := range h {
-		for iw := range w {
-			p := Point{x: iw, y: ih}
+func inBounds(p Point, maze []string) bool {
+	if (p.x < 0 || p.x >= len(maze[0])) || (p.y < 0 || p.y >= len(maze)) {
+		return false
+	}
+	return true
+}
+
+func printPath(maze []string, seen map[Point]struct{}) {
+	h := len(maze)
+	w := len(maze[0])
+	for y := range h {
+		for x := range w {
+			p := Point{x: x, y: y}
 			if _, ok := seen[p]; ok {
 				fmt.Print(".")
 			} else {
-				fmt.Print("#")
+				fmt.Print(string(maze[y][x]))
 			}
 
 		}

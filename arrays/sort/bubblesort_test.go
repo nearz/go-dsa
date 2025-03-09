@@ -1,4 +1,4 @@
-package array_sort
+package sort
 
 import (
 	"slices"
