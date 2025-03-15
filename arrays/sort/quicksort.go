@@ -1,14 +1,11 @@
 package sort
 
-import (
-	"math/rand"
-	"time"
-)
+import arrayutils "github.com/nearz/go-dsa/arrays/arrayUtils"
 
 func QuickSort(arr []int) {
 	hi := len(arr) - 1
 	lo := 0
-	shuffle(arr)
+	arrayutils.Shuffle(arr)
 	quickSort(arr, lo, hi)
 }
 
@@ -31,14 +28,4 @@ func partition(arr []int, hi, lo int) int {
 	}
 	arr[i], arr[hi] = arr[hi], arr[i]
 	return i
-}
-
-func shuffle(arr []int) {
-	src := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(src)
-	n := len(arr)
-	for i := n - 1; i > 0; i-- {
-		j := r.Intn(i + 1)
-		arr[i], arr[j] = arr[j], arr[i]
-	}
 }
