@@ -1,8 +1,11 @@
 package sort
 
 import (
+	"fmt"
 	"slices"
 	"testing"
+
+	arrayutils "github.com/nearz/go-dsa/arrays/arrayUtils"
 )
 
 func TestSelectionSort(t *testing.T) {
@@ -13,10 +16,13 @@ func TestSelectionSort(t *testing.T) {
 		t.Error("Slice not sorted, Test 1")
 	}
 
-	ts = []int{-1, 8, 14, 19, 24, 25, 31, 49, 50, 51, 57, 65}
-	s = []int{49, -1, 57, 14, 24, 8, 31, 65, 51, 25, 19, 50}
-	SelectionSort(s)
-	if !slices.Equal(ts, s) {
-		t.Error("Slice not sorted correctly, Test 2")
+	for range 10 {
+		r, s := arrayutils.RandAndSorted(100, 1000)
+		QuickSort(r)
+		if !slices.Equal(r, s) {
+			t.Error("Slice not sorted correctly\n")
+			fmt.Printf("Sorted Slice: %v\n", s)
+			fmt.Printf("Unsorted Slice: %v\n", r)
+		}
 	}
 }

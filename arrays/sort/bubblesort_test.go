@@ -1,32 +1,28 @@
 package sort
 
 import (
+	"fmt"
 	"slices"
 	"testing"
+
+	arrayutils "github.com/nearz/go-dsa/arrays/arrayUtils"
 )
 
 func TestBubbleSort(t *testing.T) {
-	a := []int{5, 3, 2, 4, 5, 1}
-	b := []int{1, 2, 3, 4, 5, 5}
-	BubbleSort(a)
-	r := slices.Equal(a, b)
-	if !r {
-		t.Errorf("BubbleSort = %t, expected true", r)
+	ts := []int{0, 1, 2, 3, 4, 6, 7, 8}
+	s := []int{8, 2, 6, 4, 0, 1, 7, 3}
+	SelectionSort(s)
+	if !slices.Equal(ts, s) {
+		t.Error("Slice not sorted, Test 1")
 	}
 
-	a = []int{1, 2}
-	b = []int{1, 2}
-	BubbleSort(a)
-	r = slices.Equal(a, b)
-	if !r {
-		t.Errorf("BubbleSort = %t, expected true", r)
-	}
-
-	a = []int{5, 4, 3, 2, 1, 0}
-	b = []int{0, 1, 2, 3, 4, 5}
-	BubbleSort(a)
-	r = slices.Equal(a, b)
-	if !r {
-		t.Errorf("BubbleSort = %t, expected true", r)
+	for range 10 {
+		r, s := arrayutils.RandAndSorted(100, 1000)
+		QuickSort(r)
+		if !slices.Equal(r, s) {
+			t.Error("Slice not sorted correctly\n")
+			fmt.Printf("Sorted Slice: %v\n", s)
+			fmt.Printf("Unsorted Slice: %v\n", r)
+		}
 	}
 }
