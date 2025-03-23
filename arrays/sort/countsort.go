@@ -1,17 +1,24 @@
 package sort
 
 import (
-	"fmt"
-
 	au "github.com/nearz/go-dsa/arrays/arrayUtils"
 )
 
-func CountSort(arr []int) {
-	fmt.Printf("Max: %d\n", au.MaxInt(arr))
+func CountSort(arr []int) []int {
 	countArr := make([]int, au.MaxInt(arr)+1)
-	fmt.Printf("S: %v\n", countArr)
 	for _, v := range arr {
 		countArr[v]++
 	}
-	fmt.Println(countArr)
+	cumulative := 0
+	for i, v := range countArr {
+		cumulative = v + cumulative
+		countArr[i] = cumulative
+	}
+	final := make([]int, len(arr))
+	for _, v := range arr {
+		j := countArr[v] - 1
+		final[j] = v
+		countArr[v] = j
+	}
+	return final
 }
