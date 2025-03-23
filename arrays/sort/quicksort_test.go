@@ -11,7 +11,7 @@ import (
 func TestQuickSort(t *testing.T) {
 	ts := []int{0, 1, 2, 3, 4, 6, 7, 8}
 	s := []int{8, 2, 6, 4, 0, 1, 7, 3}
-	SelectionSort(s)
+	QuickSort(s)
 	if !slices.Equal(ts, s) {
 		t.Error("Slice not sorted, Test 1")
 	}

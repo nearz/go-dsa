@@ -18,7 +18,7 @@ func TestSelectionSort(t *testing.T) {
 
 	for range 10 {
 		r, s := arrayutils.RandAndSorted(100, 1000)
-		QuickSort(r)
+		SelectionSort(r)
 		if !slices.Equal(r, s) {
 			t.Error("Slice not sorted correctly\n")
 			fmt.Printf("Sorted Slice: %v\n", s)

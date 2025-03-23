@@ -28,3 +28,23 @@ func RandAndSorted(n, max int) ([]int, []int) {
 	sort.Ints(sortInts)
 	return randInts, sortInts
 }
+
+func MaxInt(arr []int) int {
+	var m int
+	for i, v := range arr {
+		if i == 0 || v > m {
+			m = v
+		}
+	}
+	return m
+}
+
+func MinInt(arr []int) int {
+	var m int
+	for i, v := range arr {
+		if i == 0 || v < m {
+			m = v
+		}
+	}
+	return m
+}
