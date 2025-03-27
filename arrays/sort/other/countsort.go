@@ -7,6 +7,9 @@ import (
 func CountSort(arr []int) []int {
 	countArr := make([]int, au.MaxInt(arr)+1)
 	for _, v := range arr {
+		if v < 0 {
+			return []int{}
+		}
 		countArr[v]++
 	}
 	cumulative := 0

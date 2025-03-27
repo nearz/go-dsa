@@ -1,12 +1,13 @@
 package arrayutils
 
 import (
+	"cmp"
 	"math/rand"
 	"sort"
 	"time"
 )
 
-func Shuffle(arr []int) {
+func Shuffle[S ~[]T, T cmp.Ordered](arr S) {
 	src := rand.NewSource(time.Now().UnixNano())
 	r := rand.New(src)
 	n := len(arr)
