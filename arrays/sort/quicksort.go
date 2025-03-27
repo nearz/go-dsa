@@ -33,6 +33,7 @@ func partition[S ~[]T, T cmp.Ordered](arr S, hi, lo int) int {
 }
 
 func QuickSortFunc[S ~[]T, T any](arr S, cmp func(a, b T) bool) {
+	arrayutils.Shuffle(arr)
 	quickSortFunc(arr, 0, len(arr)-1, cmp)
 }
 
