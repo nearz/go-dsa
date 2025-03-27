@@ -79,3 +79,54 @@ func TestQuickSortFunc(t *testing.T) {
 		t.Error("Slice not sorted, Test 1 structs")
 	}
 }
+
+func TestQuickSortFuncCustomType(t *testing.T) {
+	type P struct {
+		name string
+		age  int
+	}
+	type Pslice []P
+	ps := Pslice{
+		{"Pat", 36},
+		{"Jay", 18},
+		{"April", 54},
+		{"May", 15},
+	}
+	tps := Pslice{
+		{"May", 15},
+		{"Jay", 18},
+		{"Pat", 36},
+		{"April", 54},
+	}
+	QuickSortFunc(ps, func(a, b P) bool {
+		return a.age <= b.age
+	})
+	if !slices.Equal(tps, ps) {
+		t.Error("Slice not sorted, Test 1 custom slice structs")
+	}
+}
+
+func TestQuickSortFuncStr(t *testing.T) {
+	type P struct {
+		name string
+		age  int
+	}
+	ps := []P{
+		{"Pat", 36},
+		{"Jay", 18},
+		{"April", 54},
+		{"May", 15},
+	}
+	tps := []P{
+		{"April", 54},
+		{"Jay", 18},
+		{"May", 15},
+		{"Pat", 36},
+	}
+	QuickSortFunc(ps, func(a, b P) bool {
+		return a.name < b.name
+	})
+	if !slices.Equal(tps, ps) {
+		t.Error("Slice not sorted, Test 1 structs compare string")
+	}
+}
