@@ -46,7 +46,7 @@ func New[T comparable]() *LinkedList[T] {
 }
 
 func (l *LinkedList[T]) Append(val T) {
-	n := Node[T]{
+	n := &Node[T]{
 		val:  val,
 		next: nil,
 	}
@@ -54,11 +54,11 @@ func (l *LinkedList[T]) Append(val T) {
 	// tail to new node. Else, append to list by pointing tail.next to
 	// the new node and moving tail pointer to the new node.
 	if l.head == nil && l.tail == nil {
-		l.head = &n
-		l.tail = &n
+		l.head = n
+		l.tail = n
 	} else {
-		l.tail.next = &n
-		l.tail = &n
+		l.tail.next = n
+		l.tail = n
 	}
 	l.len += 1
 }
@@ -70,7 +70,7 @@ func (l *LinkedList[T]) Add(vals ...T) {
 }
 
 func (l *LinkedList[T]) Prepend(val T) {
-	n := Node[T]{
+	n := &Node[T]{
 		val:  val,
 		next: nil,
 	}
@@ -78,11 +78,11 @@ func (l *LinkedList[T]) Prepend(val T) {
 	// tail to new node. Else, prepend to list by setting the nodes
 	// next pointer to the head and moving the head pointer to the new node.
 	if l.head == nil && l.tail == nil {
-		l.head = &n
-		l.tail = &n
+		l.head = n
+		l.tail = n
 	} else {
 		n.next = l.head
-		l.head = &n
+		l.head = n
 	}
 	l.len += 1
 }
@@ -140,7 +140,7 @@ func (l *LinkedList[T]) InsertAt(val T, idx int) error {
 		return errors.New("Index out of bounds")
 	}
 
-	n := Node[T]{
+	n := &Node[T]{
 		val:  val,
 		next: nil,
 	}
@@ -165,7 +165,7 @@ func (l *LinkedList[T]) InsertAt(val T, idx int) error {
 	for i := 0; i < idx-1; i, cur = i+1, cur.next {
 	}
 	n.next = cur.next
-	cur.next = &n
+	cur.next = n
 	l.len += 1
 	return nil
 }
@@ -190,6 +190,9 @@ func (l *LinkedList[T]) RemoveAt(idx int) (T, error) {
 		l.head.next = nil
 		l.head = next
 		l.len -= 1
+		if l.len == 0 {
+			l.tail = nil
+		}
 		return val, nil
 	}
 
@@ -228,6 +231,10 @@ func (l *LinkedList[T]) Remove(val T) (T, error) {
 	// current node's value is equal to the requested value utilize
 	// RemoveAt function to remove the node. Else the value is not found
 	// in the list.
+	var z T
+	if l.len == 0 {
+		return z, errors.New("Empty List")
+	}
 	i := 0
 	cur := l.head
 	for ; cur.val != val && cur.next != nil; i, cur = i+1, cur.next {
@@ -235,7 +242,6 @@ func (l *LinkedList[T]) Remove(val T) (T, error) {
 	if cur.val == val {
 		return l.RemoveAt(i)
 	}
-	var z T
 	return z, errors.New("Value not found")
 }
 

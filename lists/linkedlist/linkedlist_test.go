@@ -284,3 +284,24 @@ func TestRemove(t *testing.T) {
 		t.Error("Remove() - err == nil, expected error message. Value not found")
 	}
 }
+
+func TestRemoveOnlyElementClearsTail(t *testing.T) {
+	l := New[int]()
+	l.Append(42)
+	if _, err := l.RemoveAt(0); err != nil {
+		t.Fatal(err)
+	}
+	if l.Len() != 0 || l.head != nil || l.tail != nil {
+		t.Fatalf("list not fully cleared: len=%d head=%v tail=%v", l.Len(), l.head, l.tail)
+	}
+}
+
+func TestRemoveOnlyThenAppend(t *testing.T) {
+	l := New[int]()
+	l.Append(1)
+	_, _ = l.RemoveAt(0) // empty now
+	l.Append(2)          // should become head=tail=2 and not crash
+	if l.Len() != 1 || l.String() != "2" {
+		t.Fatalf("unexpected state: len=%d str=%s", l.Len(), l.String())
+	}
+}

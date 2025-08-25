@@ -49,7 +49,7 @@ func New[T comparable]() *DoublyLinkedList[T] {
 }
 
 func (d *DoublyLinkedList[T]) Append(val T) {
-	n := Node[T]{
+	n := &Node[T]{
 		val:  val,
 		next: nil,
 		prev: nil,
@@ -59,12 +59,12 @@ func (d *DoublyLinkedList[T]) Append(val T) {
 	// the new node's prev to current tail, then tail's next to
 	// the new node. Finally moving tail to the new node.
 	if d.head == nil && d.tail == nil {
-		d.head = &n
-		d.tail = &n
+		d.head = n
+		d.tail = n
 	} else {
 		n.prev = d.tail
-		d.tail.next = &n
-		d.tail = &n
+		d.tail.next = n
+		d.tail = n
 	}
 	d.len += 1
 }
@@ -76,7 +76,7 @@ func (d *DoublyLinkedList[T]) Add(vals ...T) {
 }
 
 func (d *DoublyLinkedList[T]) Prepend(val T) {
-	n := Node[T]{
+	n := &Node[T]{
 		val:  val,
 		next: nil,
 		prev: nil,
@@ -86,12 +86,12 @@ func (d *DoublyLinkedList[T]) Prepend(val T) {
 	// the new node's next to the current head, then the current
 	// head's prev to the new node. Finally moving head to the new node.
 	if d.head == nil && d.tail == nil {
-		d.head = &n
-		d.tail = &n
+		d.head = n
+		d.tail = n
 	} else {
 		n.next = d.head
-		d.head.prev = &n
-		d.head = &n
+		d.head.prev = n
+		d.head = n
 	}
 	d.len += 1
 }
@@ -149,7 +149,7 @@ func (d *DoublyLinkedList[T]) InsertAt(val T, idx int) error {
 		return errors.New("Index out of bounds")
 	}
 
-	n := Node[T]{
+	n := &Node[T]{
 		val:  val,
 		next: nil,
 		prev: nil,
@@ -174,8 +174,8 @@ func (d *DoublyLinkedList[T]) InsertAt(val T, idx int) error {
 	}
 	n.next = cur.next
 	n.prev = cur
-	cur.next.prev = &n
-	cur.next = &n
+	cur.next.prev = n
+	cur.next = n
 	d.len += 1
 	return nil
 }
@@ -192,6 +192,14 @@ func (d *DoublyLinkedList[T]) RemoveAt(idx int) (T, error) {
 		return z, errors.New("Index out of bounds")
 	}
 
+	if d.len == 1 {
+		val := d.head.val
+		d.head = nil
+		d.tail = nil
+		d.len--
+		return val, nil
+	}
+
 	// If index to remove is 0-head. Capture the value and
 	// adjust pointers to remove the node.
 	if idx == 0 {
@@ -201,6 +209,9 @@ func (d *DoublyLinkedList[T]) RemoveAt(idx int) (T, error) {
 		next.prev = nil
 		d.head = next
 		d.len -= 1
+		if d.len == 0 {
+			d.tail = nil
+		}
 		return val, nil
 	}
 
@@ -231,7 +242,7 @@ func (d *DoublyLinkedList[T]) RemoveAt(idx int) (T, error) {
 	d.len -= 1
 	if d.len == 0 {
 		d.head = nil
-		d.head = nil
+		d.tail = nil
 	}
 	return val, nil
 }
@@ -242,6 +253,10 @@ func (d *DoublyLinkedList[T]) Remove(val T) (T, error) {
 	// current node's value is equal to the requested value utilize
 	// RemoveAt function to remove the node. Else the value is not found
 	// in the list.
+	var z T
+	if d.len == 0 {
+		return z, errors.New("Empty List")
+	}
 	i := 0
 	cur := d.head
 	for ; cur.val != val && cur.next != nil; i, cur = i+1, cur.next {
@@ -249,7 +264,6 @@ func (d *DoublyLinkedList[T]) Remove(val T) (T, error) {
 	if cur.val == val {
 		return d.RemoveAt(i)
 	}
-	var z T
 	return z, errors.New("Value not found")
 }
 
