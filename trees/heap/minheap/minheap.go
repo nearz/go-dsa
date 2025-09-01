@@ -28,6 +28,8 @@ func (m *MinHeap[T]) heapifyUp(idx int) {
 	if curr < parentValue {
 		m.heap[pi] = curr
 		m.heap[idx] = parentValue
+	} else {
+		return
 	}
 	m.heapifyUp(pi)
 }
@@ -47,7 +49,7 @@ func (m *MinHeap[T]) Pop() (T, error) {
 func (m *MinHeap[T]) heapifyDown(idx int) {
 	n := len(m.heap)
 	li := leftChild(idx)
-	if idx >= n || li >= n {
+	if li >= n {
 		return
 	}
 	ri := rightChild(idx)

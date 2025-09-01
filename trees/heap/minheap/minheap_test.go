@@ -30,6 +30,42 @@ func TestHeapOneInsert(t *testing.T) {
 	}
 }
 
+func TestHeapNonDecreasing(t *testing.T) {
+	h := New[int]()
+	h.Insert(50)
+	h.Insert(55)
+	h.Insert(22)
+	h.Insert(60)
+	h.Insert(45)
+	h.Insert(33)
+	h.Insert(61)
+	h.Insert(59)
+	h.Insert(28)
+	h.Insert(39)
+	h.Insert(51)
+	val, err := h.Pop()
+	if err != nil {
+		t.Errorf("Decreasing Order error: %v", err)
+		return
+	}
+	for i := 0; i < len(h.heap); i++ {
+		next, err := h.Peek()
+		if err != nil {
+			t.Errorf("Deacreasing order erro, Peek. %v", err)
+			return
+		}
+		if val < next {
+			val, err = h.Pop()
+			if err != nil {
+				t.Errorf("Deacreasing order, error, Pop, %v", err)
+			}
+		} else {
+			t.Error("Dearcreasing order error, order violated")
+			return
+		}
+	}
+}
+
 func TestHeapTwo(t *testing.T) {
 	h := New[int]()
 	h.Insert(50)
