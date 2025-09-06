@@ -28,10 +28,8 @@ func (m *MinHeap[T]) heapifyUp(idx int) {
 	if curr < parentValue {
 		m.heap[pi] = curr
 		m.heap[idx] = parentValue
-	} else {
-		return
+		m.heapifyUp(pi)
 	}
-	m.heapifyUp(pi)
 }
 
 func (m *MinHeap[T]) Pop() (T, error) {
@@ -40,6 +38,10 @@ func (m *MinHeap[T]) Pop() (T, error) {
 		return z, errors.New("Empty MinHeap")
 	}
 	value := m.heap[0]
+	if len(m.heap) == 1 {
+		m.heap = []T{}
+		return value, nil
+	}
 	m.heap[0] = m.heap[len(m.heap)-1]
 	m.heap = m.heap[:len(m.heap)-1]
 	m.heapifyDown(0)
