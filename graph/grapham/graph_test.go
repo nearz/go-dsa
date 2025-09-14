@@ -1,4 +1,4 @@
-package graph_am
+package grapham
 
 import (
 	"fmt"

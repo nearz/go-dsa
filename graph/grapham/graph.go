@@ -1,4 +1,4 @@
-package graph_am
+package grapham
 
 import (
 	"errors"
@@ -160,53 +160,36 @@ func (g *Graph) DFS(source, target int) (bool, []int, error) {
 		return true, []int{source}, nil
 	}
 
-	prev := make([]int, g.size)
-	for i := range prev {
-		prev[i] = -1
-	}
 	seen := make([]bool, g.size)
+	path := []int{}
 
-	err := g.dfs(source, target, prev, seen)
-	if err != nil {
-		return false, nil, err
-	}
-
-	curr := target
-	if prev[curr] == -1 {
+	if !g.dfs(source, target, &path, seen) {
 		return false, nil, nil
 	}
-	out := []int{}
-	for prev[curr] != -1 {
-		out = append(out, curr)
-		curr = prev[curr]
-	}
-	out = append(out, source)
-	slices.Reverse(out)
-	return true, out, nil
+
+	return true, path, nil
 }
 
-func (g *Graph) dfs(curr, target int, prev []int, seen []bool) error {
-	if curr == target {
-		seen[target] = true
-		return nil
+func (g *Graph) dfs(curr, target int, path *[]int, seen []bool) bool {
+	if seen[curr] {
+		return false
 	}
-	if seen[target] {
-		return nil
+	seen[curr] = true
+
+	*path = append(*path, curr)
+	if curr == target {
+		return true
 	}
 
-	seen[curr] = true
-	n, err := g.Neighbors(curr)
-	if err != nil {
-		return err
-	}
+	n, _ := g.Neighbors(curr)
 	for _, v := range n {
-		if seen[v] {
-			continue
+		if g.dfs(v, target, path, seen) {
+			return true
 		}
-		prev[v] = curr
-		g.dfs(v, target, prev, seen)
 	}
-	return nil
+
+	*path = (*path)[:len(*path)-1]
+	return false
 }
 
 // Helper Functions
